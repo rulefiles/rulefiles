@@ -493,36 +493,57 @@ for (const scheme of ['light', 'dark']) {
   });
 }
 
-// N2: keepBarInView belongs to chip and reset clicks. Typing in the search box must filter without scrolling,
-// even when the bar sits under the sticky header (the case where keepBarInView would move the page).
-test('typing in the search box does not scroll the page at 320, 390 and 1440', async () => {
+// keepBarInView also runs on search input. While the search box is in view it does nothing: typing never scrolls.
+test('typing in the search box with the bar in view does not scroll the page at 320, 390 and 1440', async () => {
   for (const [w, h] of [[320, 700], [390, 844], [1440, 900]]) {
     const { page, context, errors } = await open(w, h);
     await page.evaluate(() => {
       const q = document.getElementById('matrix-q');
       const header = document.querySelector('.site-header');
-      window.scrollTo(0, q.getBoundingClientRect().top + scrollY - header.getBoundingClientRect().height + 8);
+      window.scrollTo(0, q.getBoundingClientRect().top + scrollY - header.getBoundingClientRect().bottom - 8);
     });
+    await page.click('#matrix-q'); // focusing may scroll by itself (scroll-margin-top); measure after it
     const before = await page.evaluate(() => {
-      const q = document.getElementById('matrix-q').getBoundingClientRect().top;
+      const q = document.getElementById('matrix-q').getBoundingClientRect();
       const header = document.querySelector('.site-header').getBoundingClientRect().bottom;
-      return { under: q < header, y: scrollY, q, header };
+      return { visible: q.top >= header && q.bottom <= innerHeight, y: scrollY, q: q.top, header };
     });
-    assert.ok(before.under, `${w}: search under header before typing (q=${Math.round(before.q)}, header=${Math.round(before.header)})`);
-    await page.fill('#matrix-q', 'claude');
-    const after = await page.evaluate(() => ({
-      y: scrollY,
-      q: document.getElementById('matrix-q').getBoundingClientRect().top,
-      header: document.querySelector('.site-header').getBoundingClientRect().bottom,
-      shown: document.querySelectorAll('a.mt:not(.is-off)').length
-    }));
+    assert.ok(before.visible, `${w}: search in view before typing (q=${Math.round(before.q)}, header=${Math.round(before.header)})`);
+    await page.keyboard.type('claude');
+    const after = await page.evaluate(() => ({ y: scrollY, shown: document.querySelectorAll('a.mt:not(.is-off)').length }));
     assert.equal(after.y, before.y, `${w}: typing must not scroll (was ${before.y})`);
-    assert.ok(after.q < after.header, `${w}: typing must not pull the bar back under the header`);
     assert.ok(after.shown > 0 && after.shown < matrix.cells.length, `${w}: the query still filters (${after.shown})`);
     assert.deepEqual(errors, []);
     await context.close();
   }
 });
+
+// I1: Chromium scrolls a focused, scrolled-away input's caret into view without its scroll-margin-top, which left
+// the search box under the sticky header. keepBarInView on input brings it back below the header.
+for (const scheme of ['light', 'dark']) {
+  test(`typing into the focused search after scrolling 900 px leaves it below the header in the ${scheme} theme, at 1440 and 320`, async () => {
+    for (const [w, h] of [[1440, 900], [320, 700]]) {
+      const { page, context, errors } = await open(w, h, { scheme });
+      await page.focus('#matrix-q');
+      await page.evaluate(() => window.scrollBy(0, 900));
+      const scrolled = await page.evaluate(() => scrollY);
+      assert.ok(scrolled > 0, `${scheme} ${w}: the page scrolled`);
+      await page.keyboard.type('m');
+      const r = await page.evaluate(() => ({
+        focused: document.activeElement && document.activeElement.id,
+        bottom: document.getElementById('matrix-q').getBoundingClientRect().bottom,
+        header: document.querySelector('.site-header').getBoundingClientRect().bottom,
+        y: scrollY
+      }));
+      assert.equal(r.focused, 'matrix-q');
+      assert.ok(r.bottom > r.header, `${scheme} ${w}: search bottom ${Math.round(r.bottom)} must be below header bottom ${Math.round(r.header)}`);
+      await page.keyboard.type('d');
+      assert.equal(await page.evaluate(() => scrollY), r.y, `${scheme} ${w}: the next keystroke does not move the page`);
+      assert.deepEqual(errors, []);
+      await context.close();
+    }
+  });
+}
 
 // The dot on Tools and Status is aria-hidden. While a chip of the group is on, matrix.js sets aria-label on the
 // toggle to its visible name plus data-active-text (", filter active"); it removes the attribute when the filter clears.
