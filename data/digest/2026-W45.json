@@ -1,0 +1,184 @@
+{
+  "schemaVersion": 1,
+  "license": "CC-BY-4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+  "attribution": "Rulefiles contributors",
+  "week": "2026-W45",
+  "start": "2026-11-02",
+  "end": "2026-11-08",
+  "status": "published",
+  "verifiedOn": "2026-11-09",
+  "title": "Cursor live apps, Copilot in Xcode, Claude Code auto mode",
+  "summary": "In short: [Build Live Apps in Cursor](https://cursor.com/changelog/build-live-apps) (all paid plans with cloud agents enabled): A cloud agent builds the web app and sets up hosting, auth behind Cursor SSO and, if needed, a Postgres database; security checks must pass before you publish it on a domain you pick; [GitHub Copilot is now available in Xcode’s coding assistant](https://github.blog/changelog/2026-11-04-github-copilot-is-now-available-in-xcodes-coding-assistant/) (public preview, starting with Xcode 27.3 beta): Copilot runs inside Xcode's built-in coding assistant (set it up in Xcode > Settings > Intelligence). It works on all Copilot plans, and the GitHub Copilot for Xcode extension is still a separate option; [Claude Code v2.1.319](https://github.com/anthropics/claude-code/releases/tag/v2.1.319): With telemetry or feature flags off, including behind LLM gateways, auto mode now asks about or denies calls the server can't check and doesn't fall back to the built-in classifier; `CLAUDE_CODE_AUTO_MODE_SERVER=0` keeps the classifier. Bedrock, Vertex and Foundry are unchanged",
+  "highlights": [
+    "cursor-2026-11-05-build-live-apps-in-cursor",
+    "github-copilot-2026-11-04-github-copilot-is-now-available-in-xcodes-coding-assistant",
+    "claude-code-2026-11-06-2.1.319"
+  ],
+  "items": [
+    {
+      "id": "codex-2026-11-02-chatgpt-for-ios-1-2026-300",
+      "date": "2026-11-02",
+      "tool": "codex",
+      "title": "ChatGPT for iOS 1.2026.300",
+      "text": "Task read status now syncs with supported hosts, helping clear stale unread indicators across devices.",
+      "quote": true,
+      "sourceUrl": "https://learn.chatgpt.com/docs/changelog#codex-2026-11-02-mobile",
+      "sourceLabel": "Codex changelog"
+    },
+    {
+      "id": "claude-code-2026-11-03-2.1.317",
+      "date": "2026-11-03",
+      "tool": "claude-code",
+      "title": "Claude Code v2.1.317",
+      "text": "Added a check that asks before a web or shell tool call sends your account email address to the network",
+      "quote": true,
+      "version": "2.1.317",
+      "sourceUrl": "https://github.com/anthropics/claude-code/releases/tag/v2.1.317",
+      "sourceLabel": "Claude Code releases"
+    },
+    {
+      "id": "github-copilot-2026-11-03-byok-and-enterprise-custom-models-in-the-copilot-usage-api",
+      "date": "2026-11-03",
+      "tool": "github-copilot",
+      "title": "BYOK and enterprise custom models in the Copilot usage API",
+      "text": "The Copilot usage metrics API now shows bring your own key (BYOK) usage across GitHub Copilot, so you can separate it from Copilot-hosted model usage.",
+      "quote": true,
+      "sourceUrl": "https://github.blog/changelog/2026-11-03-byok-and-enterprise-custom-models-in-the-copilot-usage-api/",
+      "sourceLabel": "GitHub changelog"
+    },
+    {
+      "id": "github-copilot-2026-11-03-github-copilot-is-now-available-in-jetbrains-air",
+      "date": "2026-11-03",
+      "tool": "github-copilot",
+      "title": "GitHub Copilot is now available in JetBrains Air",
+      "text": "You can now delegate coding tasks, guide execution, and review results with GitHub Copilot in JetBrains Air.",
+      "quote": true,
+      "sourceUrl": "https://github.blog/changelog/2026-11-03-github-copilot-is-now-available-in-jetbrains-air/",
+      "sourceLabel": "GitHub changelog"
+    },
+    {
+      "id": "claude-code-2026-11-04-2.1.318",
+      "date": "2026-11-04",
+      "tool": "claude-code",
+      "title": "Claude Code v2.1.318",
+      "text": "Added the date a stored claude.ai sign-in ends to `claude auth status` (`loginExpiresAt`) and to `claude -p` JSON results (`credential_expires_at`)",
+      "quote": true,
+      "version": "2.1.318",
+      "sourceUrl": "https://github.com/anthropics/claude-code/releases/tag/v2.1.318",
+      "sourceLabel": "Claude Code releases"
+    },
+    {
+      "id": "github-copilot-2026-11-04-github-copilot-is-now-available-in-xcodes-coding-assistant",
+      "date": "2026-11-04",
+      "tool": "github-copilot",
+      "title": "GitHub Copilot is now available in Xcode’s coding assistant",
+      "text": "You can now work with GitHub Copilot directly in Xcode’s built-in coding assistant, bringing Copilot into your native Xcode workflow.",
+      "quote": true,
+      "sourceUrl": "https://github.blog/changelog/2026-11-04-github-copilot-is-now-available-in-xcodes-coding-assistant/",
+      "sourceLabel": "GitHub changelog"
+    },
+    {
+      "id": "cursor-2026-11-05-build-live-apps-in-cursor",
+      "date": "2026-11-05",
+      "tool": "cursor",
+      "title": "Build Live Apps in Cursor",
+      "text": "Describe what you want to create and Cursor will handle the rest: build the app, set up a database, configure auth, and deploy it.",
+      "quote": true,
+      "sourceUrl": "https://cursor.com/changelog/build-live-apps",
+      "sourceLabel": "Cursor changelog"
+    },
+    {
+      "id": "github-copilot-2026-11-05-usage-metrics-api-adds-code-review-details-and-addressed-rate",
+      "date": "2026-11-05",
+      "tool": "github-copilot",
+      "title": "Usage metrics API adds code review details and addressed rate",
+      "text": "The enterprise and organization repository-level Copilot usage metrics reports now show what happens to Copilot code review feedback.",
+      "quote": true,
+      "sourceUrl": "https://github.blog/changelog/2026-11-05-usage-metrics-api-adds-code-review-details-and-addressed-rate/",
+      "sourceLabel": "GitHub changelog"
+    },
+    {
+      "id": "github-copilot-2026-11-05-usage-metrics-api-flags-telemetry-and-version-gaps",
+      "date": "2026-11-05",
+      "tool": "github-copilot",
+      "title": "Usage metrics API flags telemetry and version gaps",
+      "text": "The Copilot usage metrics API now shows which users are missing client telemetry or are running IDE or extension versions below the usage metrics minimums.",
+      "quote": true,
+      "sourceUrl": "https://github.blog/changelog/2026-11-05-usage-metrics-api-flags-telemetry-and-version-gaps/",
+      "sourceLabel": "GitHub changelog"
+    },
+    {
+      "id": "claude-code-2026-11-06-2.1.319",
+      "date": "2026-11-06",
+      "tool": "claude-code",
+      "title": "Claude Code v2.1.319",
+      "text": "Changed auto mode with telemetry or feature flags off, including behind LLM gateways: calls the server can't check are asked about or denied, with no fallback to the built-in classifier",
+      "quote": true,
+      "version": "2.1.319",
+      "sourceUrl": "https://github.com/anthropics/claude-code/releases/tag/v2.1.319",
+      "sourceLabel": "Claude Code releases"
+    },
+    {
+      "id": "codex-2026-11-06-0.167.0",
+      "date": "2026-11-06",
+      "tool": "codex",
+      "title": "Codex 0.167.0",
+      "text": "Open the agent command center with `codex agents --no-daemon`. The command center and session picker now mark unread results.",
+      "quote": true,
+      "version": "0.167.0",
+      "sourceUrl": "https://github.com/openai/codex/releases/tag/rust-v0.167.0",
+      "sourceLabel": "Codex release notes"
+    },
+    {
+      "id": "cursor-2026-11-06-voice-chat-with-agents",
+      "date": "2026-11-06",
+      "tool": "cursor",
+      "title": "Voice Chat with Agents",
+      "text": "You can now talk with your agents in a realtime voice call.",
+      "quote": true,
+      "sourceUrl": "https://cursor.com/changelog/voice-chat",
+      "sourceLabel": "Cursor changelog"
+    },
+    {
+      "id": "github-copilot-2026-11-06-copilot-code-review-api-management-and-review-overview-updates",
+      "date": "2026-11-06",
+      "tool": "github-copilot",
+      "title": "Copilot code review: API management and review overview updates",
+      "text": "You can now manage GitHub Copilot code review settings through the REST and GraphQL APIs, from enterprise policy down to individual repositories.",
+      "quote": true,
+      "sourceUrl": "https://github.blog/changelog/2026-11-06-copilot-code-review-api-management-and-review-overview-updates/",
+      "sourceLabel": "GitHub changelog"
+    },
+    {
+      "id": "github-copilot-2026-11-06-copilot-impact-dashboard-adds-chat-and-vs-code-agent-usage",
+      "date": "2026-11-06",
+      "tool": "github-copilot",
+      "title": "Copilot impact dashboard adds chat and VS Code agent usage",
+      "text": "The Agent adoption chart in the Copilot impact dashboard now includes Copilot Chat and the VS Code Agents window, so you can see engagement across nine Copilot experiences.",
+      "quote": true,
+      "sourceUrl": "https://github.blog/changelog/2026-11-06-copilot-impact-dashboard-adds-chat-and-vs-code-agent-usage/",
+      "sourceLabel": "GitHub changelog"
+    },
+    {
+      "id": "github-copilot-2026-11-06-github-copilot-weekly-releases-november-2",
+      "date": "2026-11-06",
+      "tool": "github-copilot",
+      "title": "GitHub Copilot weekly releases — November 2",
+      "text": "Give Copilot guidance on which tool requests to approve without asking you. Personal instructions for assisted approval are opt-in and apply to local sessions.",
+      "quote": true,
+      "sourceUrl": "https://github.blog/changelog/2026-11-06-github-copilot-weekly-releases-november-2/",
+      "sourceLabel": "GitHub changelog"
+    },
+    {
+      "id": "github-copilot-2026-11-06-github-in-slack-and-teams-is-generally-available",
+      "date": "2026-11-06",
+      "tool": "github-copilot",
+      "title": "@GitHub in Slack and Teams is generally available and more",
+      "text": "Investigate bugs, create issues, implement changes, and open pull requests—all without leaving your conversation.",
+      "quote": true,
+      "sourceUrl": "https://github.blog/changelog/2026-11-06-github-copilot-in-slack-and-teams-is-generally-available/",
+      "sourceLabel": "GitHub changelog"
+    }
+  ]
+}
