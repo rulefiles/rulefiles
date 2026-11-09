@@ -146,6 +146,12 @@ before(() => {
       m.lastReviewed = buildDate;
       fs.writeFileSync(path.join(r, 'data', 'matrix.json'), JSON.stringify(m, null, 2) + '\n');
     }
+    // Shipped issues verified after the build date did not exist yet at that date (for the W44 build, every issue
+    // after W44): the copy leaves them out, so the next published week does not read as a digest from the future.
+    const digestDir = path.join(r, 'data', 'digest');
+    for (const f of fs.readdirSync(digestDir)) {
+      if (f.endsWith('.json') && JSON.parse(fs.readFileSync(path.join(digestDir, f), 'utf8')).verifiedOn > buildDate) fs.rmSync(path.join(digestDir, f));
+    }
     for (const digest of digests) fs.writeFileSync(path.join(r, 'data', 'digest', `${digest.week}.json`), JSON.stringify(digest, null, 2) + '\n');
     out[variant] = path.join(r, 'dist');
     process.env.BUILD_DATE = buildDate;
