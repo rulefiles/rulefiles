@@ -160,8 +160,9 @@ if (grid && panel && notes) {
     // Tools and Status open under the line of the bar; each toggle shows or hides its own group of chips.
     const toggles = [...bar.querySelectorAll('.filter-toggle')];
     const header = document.querySelector('.site-header');
-    // A filter change can shorten the page under a scrolled window and leave the bar under the sticky header
-    // (138 px at 320 px wide). Only then is the bar brought back below it; its scroll-margin-top clears the header.
+    // Chip clicks, Reset and search input can each leave the bar under the sticky header (138 px at 320 px wide):
+    // a filter change can shorten the page under a scrolled window, and Chromium scrolls a focused input's caret into
+    // view without its scroll-margin-top. Only then is the bar brought back below it; a visible bar never moves.
     const keepBarInView = () => {
       if (!header || !search) return;
       if (search.getBoundingClientRect().top < header.getBoundingClientRect().bottom) bar.scrollIntoView({ block: 'start' });
@@ -201,6 +202,8 @@ if (grid && panel && notes) {
       update();
       keepBarInView();
     });
+    // Typing runs keepBarInView too: it does nothing while the search box is in view, so a keystroke never moves a
+    // visible bar, but it pulls the box back out from under the header after the caret jump described above.
     if (search) search.addEventListener('input', () => { update(); keepBarInView(); });
     update();
   }
