@@ -143,12 +143,13 @@ test('the command line honours --strict and RULEFILES_STRICT, and the default ru
   } finally { fs.rmSync(dir, { recursive: true, force: true }); }
 });
 
-// Reproducible outside this box: a parent package.json without "type" would make Node load the
-// scratch's .js files as CommonJS. The copied package.json of the project stops that.
-test('CLI build still exits 0 when the scratch sits under a package.json that has no type field', () => {
+// Reproducible outside this box: a parent package.json with "type": "commonjs" (the case of the
+// stray /tmp/package.json) makes Node load the scratch's .js files as CommonJS. A parent with no
+// "type" is not enough on recent Node, which falls back to ESM. The copied package.json stops that.
+test('CLI build still exits 0 when the scratch sits under a package.json with type commonjs', () => {
   const parent = fs.mkdtempSync(path.join(os.tmpdir(), 'rulefiles-parent-'));
   try {
-    fs.writeFileSync(path.join(parent, 'package.json'), '{ "name": "hostile-parent" }\n');
+    fs.writeFileSync(path.join(parent, 'package.json'), '{ "name": "hostile-parent", "type": "commonjs" }\n');
     const dir = scratchProject(parent);
     const run = (args, env = {}) => spawnSync(process.execPath, [path.join(dir, 'scripts', 'build.mjs'), ...args], {
       cwd: dir, encoding: 'utf8', env: { ...process.env, BUILD_DATE: TEST_DATE, SITE_URL: '', RULEFILES_STRICT: '', ...env }
