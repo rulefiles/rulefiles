@@ -54,7 +54,7 @@ docs/BRAND-CLEARANCE.md     trademark, collision, domain, handle and fee checks 
 
 ## How a bot keeps it current
 
-1. The weekly workflow runs `npm run watch`. It reads the official feeds, skips anything already published or already listed, and writes `data/drafts/YYYY-Www.draft.json`. It opens a pull request. It never publishes.
+1. Run `npm run watch` (or `npm run watch:offline` against the fixtures). It reads the official feeds, skips anything already published or already listed, and writes `data/drafts/YYYY-Www.draft.json`. It never publishes and never opens a pull request.
 2. A reviewer, human or bot, opens the draft, keeps the items worth publishing, checks each against its source link, and moves the file to `data/digest/YYYY-Www.json` with `"status": "published"`.
 3. For the matrix, a person or bot re-reads the cited official pages and updates `verifiedOn`. The watch script does not fetch documentation pages. `npm run validate` warns about cells older than `staleAfterDays`.
 4. `npm run validate` and `npm test` must pass before merge. Validation fails on a source URL that is not https or not on an official host, a missing matrix cell, a bad date, or an item dated outside its week.

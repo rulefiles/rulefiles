@@ -70,28 +70,19 @@ Do it once per deployment, not more: the documentation asks to submit when conte
 
 ## CI
 
-- `.github/workflows/ci.yml` runs on pushes and pull requests: `npm ci`, validate, build, test, check links, on Node 20 and 22. The only dev dependency is `yaml`, used by the generator tests to parse the frontmatter that the generator writes.
-- `.github/workflows/weekly-watch.yml` runs every Monday at 06:17 UTC and on demand, with a 15 minute timeout. It runs the watch script, validates the drafts, then runs `scripts/open-watch-pr.sh`, which commits on a new branch and opens a draft pull request. It never deploys. The checkout does not keep credentials. The push passes the token for that one command only. The branch name holds the date, the run id and the attempt number, so a second run on the same day does not collide with the first. The repository setting "Allow GitHub Actions to create and approve pull requests" must be on for the pull request step.
-- A manual run has a `dry_run` input (boolean, off by default). With it on, the workflow fetches the feeds, validates the drafts and makes the commit on the runner, then stops before the push and before `gh pr create`. The log of the last step shows the branch name and the files of the commit.
-- A pull request opened with `GITHUB_TOKEN` does not start other workflows, so CI does not run on the watch pull request by itself. A person can close and reopen it, or push a commit from their own account, and CI then runs. This was not tested here.
+- `.github/workflows/ci.yml` runs on pushes and pull requests: `npm ci`, validate, build, test, check links, on Node 20 and 22, plus a Chromium browser job for `/matrix/`. A manual `workflow_dispatch` takes a `base_url` input, checks it with `scripts/check-preview-base-url.mjs` (only `https://rulefiles.dev` and `https://<subdomain>.rulefiles.pages.dev`), then runs the browser suite with `BROWSER_BASE_URL`. The input is passed only through `env`, never interpolated into a `run:` line. No new secret. The only Node test dependency beyond Playwright is `yaml`, used by the generator tests to parse the frontmatter that the generator writes.
+- There is no workflow that opens a watch pull request. Listing changes from the feeds is a local `npm run watch` (or `watch:offline`) step; a person or bot then reviews the draft and opens a PR by hand if needed.
 - One test reads the commit messages of `origin/main..HEAD` to keep the owner's name out of them (`tests/launch.test.mjs`). The CI checkout fetches one commit and has no `origin/main`, and on `main` itself the range is empty, so there the test is reported as skipped with its reason, not passed. It runs in a full clone before a push: `git fetch origin && npm test`.
-- Actions are pinned to commit SHAs. The workflows use the built-in `GITHUB_TOKEN` and no other secret.
+- Actions are pinned to commit SHAs. The workflow uses the built-in `GITHUB_TOKEN` and no other secret.
 
-## Testing the weekly watch
+## Testing the watch script
 
 Done locally on 2026-10-16, with no write to GitHub:
 
-- `actionlint` 1.7.12 (checksum compared with the release's checksums file) finds nothing in the two workflows, and `shellcheck` 0.11.0 finds nothing in `scripts/open-watch-pr.sh`. `act` needs Docker, which was not installed on the machine used for the checks, so it was not run.
+- `actionlint` 1.7.12 (checksum compared with the release's checksums file) finds nothing in `.github/workflows/ci.yml`. `act` needs Docker, which was not installed on the machine used for the checks, so it was not run.
 - `node scripts/watch.mjs` ran against the four real feeds with the polite fetcher: 10 requests the first time (robots.txt files and feeds), 4 cache hits and 0 requests the second time, 230 entries parsed, 15 new changes since 2026-10-06, two draft files written, `npm run validate` passed on them.
-- `scripts/open-watch-pr.sh` ran in a scratch clone whose remote was a local bare repository and whose `gh` was a stub. A dry run left the remote untouched and called nothing. A real run pushed `watch/2026-10-16-555-2`, called `gh pr create --draft --base main --head watch/2026-10-16-555-2`, and left no token and no extraheader in `.git/config`.
-- `tests/watch-workflow.test.mjs` repeats those cases in CI with a stub `gh`: nothing to commit, dry run, real run, three runs on one day, and a missing run id or token.
+- `tests/watch.test.mjs` covers the offline fixtures, the skip notice and the size limits in CI.
 
-Still to check on GitHub, once, with Actions > Weekly watch > Run workflow:
-
-1. Run with `dry_run` on. The run must be green, and the last step must print "Dry run" and the branch it would push. This checks the checkout, Node setup, network access to the feeds from the runner and the validation step.
-2. Turn on "Allow GitHub Actions to create and approve pull requests" in the repository settings, then run with `dry_run` off. This checks that the push with the extraheader is accepted, that `gh pr create --draft` works with `GITHUB_TOKEN`, and that the branch rules let `watch/*` branches be created.
-3. Check that CI does not start on the new pull request by itself, and that closing and reopening it starts CI. The first half is documented by GitHub, the second half has not been seen here.
-4. Check that the schedule fires on its own on the next Monday. A `cron` trigger cannot be tried by hand.
 
 ## Recommended protection for main
 
@@ -101,7 +92,7 @@ It has been active on `main` since 2026-10-18. `gh api repos/rulefiles/rulefiles
 
 Before 2026-10-18 nothing blocked a direct push, a force push or the deletion of `main`, so the owner merged through pull requests by habit. Already set on 2026-10-16, as reported by the owner: squash merges only, "Allow GitHub Actions to create and approve pull requests" on, and the two GitHub email settings ("Keep my email addresses private" and "Block command line pushes that expose my email") on.
 
-The weekly watch pushes branches named `watch/...` and opens a pull request, so it fits this ruleset as long as the repository setting for creating pull requests with Actions is on. A pull request opened that way does not start CI by itself, so the required checks stay pending until someone closes and reopens it.
+A pull request opened with `GITHUB_TOKEN` from Actions does not start CI by itself; that path is unused now that the weekly watch workflow is gone. Ordinary pull requests from a personal account start CI as usual.
 
 ## Launch checklist
 
