@@ -493,6 +493,41 @@ for (const scheme of ['light', 'dark']) {
   });
 }
 
+// From 60rem to 71.99rem (960 to 1151 px) a tile column is narrower than the longest word of a tool name, so the names
+// read bottom to top, as on a phone. From 72rem they run across again. Either way each word stays on one line, inside
+// its own column, clear of the next name. Zero-size rects from getClientRects are not lines.
+for (const scheme of ['light', 'dark']) {
+  test(`tool names never break inside a word and stay in their column at 768 to 1200 px in the ${scheme} theme, vertical from 960 to 1151 only`, async () => {
+    for (const [w, vertical] of [[768, false], [960, true], [1024, true], [1151, true], [1152, false], [1200, false]]) {
+      const { page, context, errors } = await open(w, 900, { scheme });
+      const r = await page.evaluate(() => [...document.querySelectorAll('#matrix-grid .mtool')].map((el) => {
+        const text = el.querySelector('a').firstChild;
+        const box = el.getBoundingClientRect();
+        const words = [];
+        for (const m of text.textContent.matchAll(/\S+/g)) {
+          const range = document.createRange();
+          range.setStart(text, m.index);
+          range.setEnd(text, m.index + m[0].length);
+          words.push({ word: m[0], lines: [...range.getClientRects()].filter((q) => q.width > 0 && q.height > 0).length });
+        }
+        const all = document.createRange();
+        all.selectNodeContents(text);
+        const ink = all.getBoundingClientRect();
+        return { name: text.textContent, mode: getComputedStyle(el).writingMode, words, left: ink.left, right: ink.right, boxLeft: box.left, boxRight: box.right };
+      }));
+      assert.ok(r.length > 0, 'tool names are rendered');
+      r.forEach((t, i) => {
+        assert.equal(t.mode, vertical ? 'vertical-rl' : 'horizontal-tb', `${scheme} ${w}px: "${t.name}" reads ${vertical ? 'bottom to top' : 'across'}`);
+        for (const x of t.words) assert.equal(x.lines, 1, `${scheme} ${w}px: "${x.word}" in "${t.name}" breaks over ${x.lines} lines`);
+        assert.ok(t.left >= t.boxLeft - 1 && t.right <= t.boxRight + 1, `${scheme} ${w}px: "${t.name}" spills out of its column (${t.left.toFixed(1)}-${t.right.toFixed(1)} vs ${t.boxLeft.toFixed(1)}-${t.boxRight.toFixed(1)})`);
+        if (i > 0) assert.ok(t.left >= r[i - 1].right, `${scheme} ${w}px: "${t.name}" overlaps "${r[i - 1].name}"`);
+      });
+      assert.deepEqual(errors, []);
+      await context.close();
+    }
+  });
+}
+
 // keepBarInView also runs on search input. While the search box is in view it does nothing: typing never scrolls.
 test('typing in the search box with the bar in view does not scroll the page at 320, 390 and 1440', async () => {
   for (const [w, h] of [[320, 700], [390, 844], [1440, 900]]) {
