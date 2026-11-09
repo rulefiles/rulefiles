@@ -58,11 +58,15 @@ test('launchWarnings reports markers in pages and in the configuration, once eac
   assert.deepEqual(launchWarnings([], { baseUrl: 'https://rulefiles.dev' }), [], 'the domain is bought, so baseUrl is not a launch warning');
 });
 
-/** A copy of the project inputs in a temporary folder, so a test can edit them. */
-function scratchProject() {
-  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'rulefiles-strict-'));
+/** A copy of the project inputs in a temporary folder, so a test can edit them.
+ *  package.json comes along so a parent under TMPDIR (for example /tmp/package.json with
+ *  "type": "commonjs") cannot turn the scratch's .js modules into CommonJS. The file is
+ *  copied as-is: the test does not invent or force a "type" field. */
+function scratchProject(base = os.tmpdir()) {
+  const dir = fs.mkdtempSync(path.join(base, 'rulefiles-strict-'));
   for (const d of ['data', 'content', 'src', 'scripts']) fs.cpSync(path.join(root, d), path.join(dir, d), { recursive: true });
   fs.copyFileSync(path.join(root, 'site.config.json'), path.join(dir, 'site.config.json'));
+  fs.copyFileSync(path.join(root, 'package.json'), path.join(dir, 'package.json'));
   return dir;
 }
 const addMarker = (dir) => fs.appendFileSync(path.join(dir, 'content', 'about.md'), '\nOwner: [[TODO-OWNER: test field]].\n');
@@ -137,6 +141,24 @@ test('the command line honours --strict and RULEFILES_STRICT, and the default ru
     fillMarkers(dir);
     assert.equal(run(['--strict']).status, 0);
   } finally { fs.rmSync(dir, { recursive: true, force: true }); }
+});
+
+// Reproducible outside this box: a parent package.json without "type" would make Node load the
+// scratch's .js files as CommonJS. The copied package.json of the project stops that.
+test('CLI build still exits 0 when the scratch sits under a package.json that has no type field', () => {
+  const parent = fs.mkdtempSync(path.join(os.tmpdir(), 'rulefiles-parent-'));
+  try {
+    fs.writeFileSync(path.join(parent, 'package.json'), '{ "name": "hostile-parent" }\n');
+    const dir = scratchProject(parent);
+    const run = (args, env = {}) => spawnSync(process.execPath, [path.join(dir, 'scripts', 'build.mjs'), ...args], {
+      cwd: dir, encoding: 'utf8', env: { ...process.env, BUILD_DATE: TEST_DATE, SITE_URL: '', RULEFILES_STRICT: '', ...env }
+    });
+    addMarker(dir);
+    const plain = run([]);
+    assert.equal(plain.status, 0, plain.stderr);
+    assert.match(plain.stderr, /LAUNCH WARNING/);
+    assert.equal(run(['--strict']).status, 1);
+  } finally { fs.rmSync(parent, { recursive: true, force: true }); }
 });
 
 test('every marker in the sources is listed in docs/LAUNCH-BLOCKERS.md, and every listed marker exists', () => {
