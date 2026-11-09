@@ -8,30 +8,15 @@ const load = (f) => {
   return { text, doc: parse(text) };
 };
 
-test('weekly watch: draft pull request, no persisted credentials, timeout and a unique branch name', () => {
-  const { text, doc } = load('weekly-watch.yml');
-  const job = doc.jobs.watch;
-  assert.ok(job['timeout-minutes'] > 0 && job['timeout-minutes'] <= 30);
-  const checkout = job.steps.find((s) => String(s.uses).startsWith('actions/checkout@'));
-  assert.equal(checkout.with['persist-credentials'], false);
-  const step = job.steps.find((s) => /open-watch-pr\.sh/.test(s.run || ''));
-  assert.ok(step, 'the pull request step runs scripts/open-watch-pr.sh');
-  const script = fs.readFileSync(new URL('../scripts/open-watch-pr.sh', import.meta.url), 'utf8');
-  assert.match(script, /gh pr create --draft /);
-  assert.match(script, /branch="watch\/\$\{stamp\}-\$\{GITHUB_RUN_ID:\?[^}]*\}-\$\{GITHUB_RUN_ATTEMPT:\?[^}]*\}"/);
-  assert.match(script, /extraheader/);
-  assert.doesNotMatch(script, /git push origin "\$branch"\s*$/m, 'the push must carry the token explicitly');
-  assert.doesNotMatch(text + script, /ghp_|github_pat_/);
-});
-
 test('workflows pin every action to a commit SHA and request only the permissions they use', () => {
-  for (const f of ['ci.yml', 'weekly-watch.yml']) {
+  for (const f of ['ci.yml']) {
     const { text, doc } = load(f);
     for (const m of text.matchAll(/uses:\s*(\S+)/g)) assert.match(m[1], /@[0-9a-f]{40}$/, `${f}: ${m[1]}`);
     assert.ok(doc.permissions, `${f} sets permissions`);
   }
   assert.deepEqual(load('ci.yml').doc.permissions, { contents: 'read' });
-  assert.deepEqual(load('weekly-watch.yml').doc.permissions, { contents: 'write', 'pull-requests': 'write' });
+  assert.equal(fs.existsSync(new URL('../.github/workflows/weekly-watch.yml', import.meta.url)), false, 'the weekly watch workflow is gone');
+  assert.equal(fs.existsSync(new URL('../scripts/open-watch-pr.sh', import.meta.url)), false, 'open-watch-pr.sh is gone');
 });
 
 test('CI installs the locked dev dependencies before running the tests', () => {
@@ -54,16 +39,21 @@ test('the recommended ruleset is valid JSON and requires exactly the CI checks t
   assert.deepEqual(ruleset.rules.find((r) => r.type === 'pull_request').parameters.allowed_merge_methods, ['squash']);
 });
 
-test('CI offers a manual browser-preview run against a preview URL, with no new secret', () => {
+test('CI offers a manual browser-preview run against a checked preview URL, with no new secret', () => {
   const { text, doc } = load('ci.yml');
   const input = doc.on.workflow_dispatch.inputs.base_url;
   assert.equal(input.required, true);
   assert.equal(input.type, 'string');
   const job = doc.jobs['browser-preview'];
   assert.equal(job.if, "github.event_name == 'workflow_dispatch'");
+  const check = job.steps.find((s) => (s.run || '') === 'node scripts/check-preview-base-url.mjs');
+  assert.ok(check, 'browser-preview checks the URL before the suite');
+  assert.equal(check.env.BROWSER_BASE_URL, '${{ inputs.base_url }}');
   const step = job.steps.find((s) => (s.run || '') === 'npm run test:browser');
   assert.ok(step, 'browser-preview runs npm run test:browser');
   assert.equal(step.env.BROWSER_BASE_URL, '${{ inputs.base_url }}');
   assert.ok(!job.steps.some((s) => /npm run build/.test(s.run || '')), 'no local build: the suite hits the URL');
   assert.doesNotMatch(text, /pull_request_target|secrets\.|CLOUDFLARE|CF_API|wrangler/);
+  // The input must never be interpolated into a run: line (only into env).
+  assert.doesNotMatch(text, /run:.*inputs\.base_url/);
 });

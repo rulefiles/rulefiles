@@ -111,7 +111,7 @@ export function skippedNotice(skipped) {
   return `⚠ Sources skipped: ${skipped.map((s) => `${s.id} (${String(s.reason).replace(/\s+/g, ' ').trim()})`).join('; ')}`;
 }
 
-/** scripts/open-watch-pr.sh reads this file. It is written on every run, and removed when nothing was skipped, so an old notice never stays. */
+/** Written on every run and removed when nothing was skipped, so an old notice never stays. */
 export function writeSkippedNotice(file, skipped) {
   const notice = skippedNotice(skipped);
   if (notice) writeFile(file, notice + '\n');

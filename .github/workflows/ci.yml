@@ -59,6 +59,7 @@ jobs:
 
   # Manual only: Cloudflare Pages previews are uploaded outside this repository, so CI has no preview URL
   # without a new secret or a deploy step. Pass the branch preview URL as base_url. No build: the suite hits the URL.
+  # base_url is only passed through env (never interpolated into a run: line) and checked before the suite.
   browser-preview:
     if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
@@ -71,10 +72,13 @@ jobs:
           node-version: '22'
       - name: Install dev dependencies
         run: npm ci
+      - name: Check preview URL
+        env:
+          BROWSER_BASE_URL: ${{ inputs.base_url }}
+        run: node scripts/check-preview-base-url.mjs
       - name: Install Chromium
         run: npx playwright install --with-deps chromium
       - name: Browser tests against preview
         env:
           BROWSER_BASE_URL: ${{ inputs.base_url }}
         run: npm run test:browser
-
