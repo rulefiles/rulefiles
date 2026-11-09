@@ -69,7 +69,7 @@
   /* Interactive accent = BAR signal-deep for AA on paper; brand signal stays on the mark. */
   --accent: #9a4318;
   --accent-hover: #7a3512;
-  /* Tool names in the matrix header: no underline on phones, so they stay 3:1 from body text as well as 4.5:1 on the page. */
+  /* Matrix header links (File column and tool names): tool names lose the underline on phones, so the colour stays 3:1 from body text as well as 4.5:1 on the page. */
   --head-link: #a94a1a;
   --on-accent: #ffffff;
   --mark: #ffe066;
@@ -536,7 +536,7 @@ main > .lead.mx-lead { margin-bottom: var(--s2); }
 .mfile { min-width: 0; font-size: 0.875rem; }
 .mfile code { background: none; padding: 0; font-weight: 650; overflow-wrap: anywhere; }
 .mfile .muted { font-size: 0.8125rem; line-height: 1.35; }
-.mhead .mfile a { font-weight: 700; }
+.mhead .mfile a { font-weight: 700; color: var(--head-link); }
 @media (min-width: 48rem) { .mhead { position: sticky; top: var(--header-h); z-index: 2; } }
 .mtool { min-width: 0; font-size: 0.8125rem; font-weight: 700; line-height: 1.25; text-align: center; overflow-wrap: anywhere; }
 .mtool a { color: var(--head-link); }

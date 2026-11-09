@@ -160,8 +160,9 @@ if (grid && panel && notes) {
     // Tools and Status open under the line of the bar; each toggle shows or hides its own group of chips.
     const toggles = [...bar.querySelectorAll('.filter-toggle')];
     const header = document.querySelector('.site-header');
-    // A filter change can shorten the page under a scrolled window and leave the bar under the sticky header
+    // A chip or reset click can shorten the page under a scrolled window and leave the bar under the sticky header
     // (138 px at 320 px wide). Only then is the bar brought back below it; its scroll-margin-top clears the header.
+    // Search input calls update alone: typing must not scroll.
     const keepBarInView = () => {
       if (!header || !search) return;
       if (search.getBoundingClientRect().top < header.getBoundingClientRect().bottom) bar.scrollIntoView({ block: 'start' });
@@ -201,7 +202,8 @@ if (grid && panel && notes) {
       update();
       keepBarInView();
     });
-    if (search) search.addEventListener('input', () => { update(); keepBarInView(); });
+    // Typing filters in place. keepBarInView belongs to chip and reset clicks: a keystroke must not scroll.
+    if (search) search.addEventListener('input', () => { update(); });
     update();
   }
   fromHash();
