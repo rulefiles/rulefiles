@@ -540,6 +540,13 @@ main > .lead.mx-lead { margin-bottom: var(--s2); }
 @media (min-width: 48rem) { .mhead { position: sticky; top: var(--header-h); z-index: 2; } }
 .mtool { min-width: 0; font-size: 0.8125rem; font-weight: 700; line-height: 1.25; text-align: center; overflow-wrap: anywhere; }
 .mtool a { color: var(--head-link); }
+/* From 60rem to 75rem the panel takes the side and a tile column is 32 to 56 pixels wide, narrower than the longest
+   tool name, so the names read bottom to top, as on a phone, and break between words only. */
+@media (min-width: 60rem) and (max-width: 74.99rem) {
+  .mtool { writing-mode: vertical-rl; transform: rotate(180deg); justify-self: center; max-height: 6.5rem; font-size: 0.75rem; overflow-wrap: normal; }
+  .mtool a { text-decoration: none; }
+  .mtool a:hover { text-decoration: underline; }
+}
 .mt { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.2rem; min-height: 3.4rem; padding: 0.25rem; border: 1px solid transparent; border-radius: 8px; font-size: 0.75rem; font-weight: 680; line-height: 1.2; text-align: center; text-decoration: none; transition: background-color 0.2s var(--ease), color 0.2s var(--ease); }
 .mt .ic { width: 1.05rem; height: 1.05rem; stroke-width: 2.4; flex: none; }
 .mt:hover { text-decoration: underline; text-underline-offset: 2px; }
