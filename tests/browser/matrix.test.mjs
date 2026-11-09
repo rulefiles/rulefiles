@@ -463,30 +463,69 @@ test('a chip clicked with the bar in view does not scroll the page (1440 × 900 
   }
 });
 
-// Tool names in the header row are links without an underline on phones, so their colour must stand 3:1 apart from
-// the body text, and 4.5:1 from the page behind them.
+// File column header and tool names share --head-link. Tool names lose their underline on phones, so the colour
+// must stand 3:1 apart from the body text, and 4.5:1 from the page behind them.
 for (const scheme of ['light', 'dark']) {
-  test(`header tool links keep 3:1 from body text and 4.5:1 on the page in the ${scheme} theme, at 390 and 1440 px`, async () => {
+  test(`header File and tool links keep 3:1 from body text and 4.5:1 on the page in the ${scheme} theme, at 390 and 1440 px`, async () => {
     for (const w of [390, 1440]) {
       const { page, context } = await open(w, 900, { scheme });
       const r = await page.evaluate(() => {
         const bgOf = (el) => { for (; el; el = el.parentElement) { const c = getComputedStyle(el).backgroundColor; if (!/rgba\(.*,\s*0\)$|transparent/.test(c)) return c; } return 'rgb(255, 255, 255)'; };
         const links = [...document.querySelectorAll('#matrix-grid .mtool a')];
-        return { n: links.length, ink: getComputedStyle(document.body).color, list: links.map((a) => ({ fg: getComputedStyle(a).color, bg: bgOf(a), line: getComputedStyle(a).textDecorationLine })) };
+        const file = document.querySelector('#matrix-grid .mhead .mfile a');
+        return {
+          n: links.length,
+          ink: getComputedStyle(document.body).color,
+          list: links.map((a) => ({ fg: getComputedStyle(a).color, bg: bgOf(a), line: getComputedStyle(a).textDecorationLine })),
+          file: file ? { fg: getComputedStyle(file).color, bg: bgOf(file) } : null
+        };
       });
       assert.equal(r.n, matrix.tools.length);
-      for (const l of r.list) {
+      assert.ok(r.file, `${scheme} ${w}px: File column header link missing`);
+      for (const l of [...r.list, r.file]) {
         assert.ok(ratio(l.fg, r.ink) >= 3, `${scheme} ${w}px: link ${l.fg} vs body text ${r.ink}: ${ratio(l.fg, r.ink).toFixed(2)}:1`);
         assert.ok(ratio(l.fg, l.bg) >= 4.5, `${scheme} ${w}px: link on ${l.bg}: ${ratio(l.fg, l.bg).toFixed(2)}:1`);
       }
+      assert.ok(r.list.every((l) => l.fg === r.file.fg), `${scheme} ${w}px: File header and tool names share --head-link`);
       if (w === 390) assert.ok(r.list.every((l) => l.line === 'none'), 'no underline on a phone, which is why the 3:1 matters');
       await context.close();
     }
   });
 }
 
-// The dot on Tools and Status has a screen-reader hook: an empty .filter-state span in each toggle. matrix.js fills
-// it from data-active-text while a chip of the group is on, and empties it otherwise. The text itself is not written yet.
+// N2: keepBarInView belongs to chip and reset clicks. Typing in the search box must filter without scrolling,
+// even when the bar sits under the sticky header (the case where keepBarInView would move the page).
+test('typing in the search box does not scroll the page at 320, 390 and 1440', async () => {
+  for (const [w, h] of [[320, 700], [390, 844], [1440, 900]]) {
+    const { page, context, errors } = await open(w, h);
+    await page.evaluate(() => {
+      const q = document.getElementById('matrix-q');
+      const header = document.querySelector('.site-header');
+      window.scrollTo(0, q.getBoundingClientRect().top + scrollY - header.getBoundingClientRect().height + 8);
+    });
+    const before = await page.evaluate(() => {
+      const q = document.getElementById('matrix-q').getBoundingClientRect().top;
+      const header = document.querySelector('.site-header').getBoundingClientRect().bottom;
+      return { under: q < header, y: scrollY, q, header };
+    });
+    assert.ok(before.under, `${w}: search under header before typing (q=${Math.round(before.q)}, header=${Math.round(before.header)})`);
+    await page.fill('#matrix-q', 'claude');
+    const after = await page.evaluate(() => ({
+      y: scrollY,
+      q: document.getElementById('matrix-q').getBoundingClientRect().top,
+      header: document.querySelector('.site-header').getBoundingClientRect().bottom,
+      shown: document.querySelectorAll('a.mt:not(.is-off)').length
+    }));
+    assert.equal(after.y, before.y, `${w}: typing must not scroll (was ${before.y})`);
+    assert.ok(after.q < after.header, `${w}: typing must not pull the bar back under the header`);
+    assert.ok(after.shown > 0 && after.shown < matrix.cells.length, `${w}: the query still filters (${after.shown})`);
+    assert.deepEqual(errors, []);
+    await context.close();
+  }
+});
+
+// The dot on Tools and Status is aria-hidden. While a chip of the group is on, matrix.js sets aria-label on the
+// toggle to its visible name plus data-active-text (", filter active"); it removes the attribute when the filter clears.
 test('the active-filter dot is named on its toggle: Tools or Status, then ", filter active" while a chip of that group is on', async () => {
   const { page, context, errors } = await open(1440, 900);
   const named = async (name) => page.getByRole('button', { name, exact: true }).count();
