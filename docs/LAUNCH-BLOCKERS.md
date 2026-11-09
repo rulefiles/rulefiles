@@ -57,7 +57,7 @@ Decided on 2026-10-16: not open at launch, no rates and no figure published. `co
 
 ## 8. Repository settings
 
-Open: enable "Allow GitHub Actions to create and approve pull requests" for the weekly watch workflow, and protect `main`. Pull requests that the workflow opens with `GITHUB_TOKEN` do not start CI by themselves (see `docs/OPERATIONS.md`).
+Open: protect `main`. The weekly watch workflow was removed, so "Allow GitHub Actions to create and approve pull requests" is no longer needed. The watch now runs locally with `npm run watch` (see `docs/OPERATIONS.md`).
 
 ## 9. Data freshness
 
