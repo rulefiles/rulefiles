@@ -173,3 +173,19 @@ test('without JavaScript the filter bar is hidden by CSS and every note shows; h
   const js = fs.readFileSync(new URL('../src/static/matrix.js', import.meta.url), 'utf8');
   assert.doesNotMatch(js, /bar\.hidden/, 'the script does not reveal the bar after the first paint');
 });
+
+test('keepBarInView runs after a chip or reset click and on search input', () => {
+  const js = fs.readFileSync(new URL('../src/static/matrix.js', import.meta.url), 'utf8');
+  const input = /search\.addEventListener\('input',\s*\(\)\s*=>\s*\{([^}]*)\}\)/.exec(js);
+  assert.ok(input, 'the search input listener is present');
+  assert.match(js.replace(input[0], ''), /update\(\);\s*keepBarInView\(\);/, 'chip and reset clicks call keepBarInView after update');
+  assert.match(input[1], /update\(\);\s*keepBarInView\(\);/, 'typing calls keepBarInView after update');
+  // Mutation: dropping keepBarInView from the input listener (the I1 regression) would fail the check above.
+  const mutated = js.replace(
+    "search.addEventListener('input', () => { update(); keepBarInView(); });",
+    "search.addEventListener('input', () => { update(); });"
+  );
+  assert.notEqual(mutated, js, 'the mutation matched nothing');
+  const bad = /search\.addEventListener\('input',\s*\(\)\s*=>\s*\{([^}]*)\}\)/.exec(mutated)[1];
+  assert.doesNotMatch(bad, /keepBarInView/, 'the mutation drops keepBarInView from input');
+});

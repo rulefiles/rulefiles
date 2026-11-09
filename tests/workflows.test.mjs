@@ -53,3 +53,17 @@ test('the recommended ruleset is valid JSON and requires exactly the CI checks t
   assert.deepEqual(required, expected);
   assert.deepEqual(ruleset.rules.find((r) => r.type === 'pull_request').parameters.allowed_merge_methods, ['squash']);
 });
+
+test('CI offers a manual browser-preview run against a preview URL, with no new secret', () => {
+  const { text, doc } = load('ci.yml');
+  const input = doc.on.workflow_dispatch.inputs.base_url;
+  assert.equal(input.required, true);
+  assert.equal(input.type, 'string');
+  const job = doc.jobs['browser-preview'];
+  assert.equal(job.if, "github.event_name == 'workflow_dispatch'");
+  const step = job.steps.find((s) => (s.run || '') === 'npm run test:browser');
+  assert.ok(step, 'browser-preview runs npm run test:browser');
+  assert.equal(step.env.BROWSER_BASE_URL, '${{ inputs.base_url }}');
+  assert.ok(!job.steps.some((s) => /npm run build/.test(s.run || '')), 'no local build: the suite hits the URL');
+  assert.doesNotMatch(text, /pull_request_target|secrets\.|CLOUDFLARE|CF_API|wrangler/);
+});

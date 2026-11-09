@@ -553,8 +553,20 @@ test('inlineHtml turns **bold** into strong after escaping, and leaves stars ins
   assert.equal(inlineHtml('glob `src/**/*.ts` and `**`'), 'glob <code>src/**/*.ts</code> and <code>**</code>');
   assert.equal(inlineHtml('unbalanced **bold'), 'unbalanced **bold');
   assert.equal(inlineHtml('2 ** 3 ** 4'), '2 ** 3 ** 4', 'stars around spaces are not bold');
+  assert.equal(inlineHtml('x ** b** y'), 'x ** b** y', 'a leading space inside the markers is not bold');
   assert.equal(inlineHtml('a\u00000\u0000 `b`'), 'a0 <code>b</code>', 'a stray placeholder byte cannot pull in a code span');
   assert.equal(stripMd('**Not read**: `AGENTS.md`'), 'Not read: AGENTS.md');
+});
+
+test('relaxing the bold regex space rule turns "x ** b** y" into a strong tag (mutation)', () => {
+  const src = fs.readFileSync(new URL('../scripts/lib/render.mjs', import.meta.url), 'utf8');
+  const tight = String.raw`/\*\*(?=\S)([^*\n]*?\S)\*\*/g`;
+  const loose = String.raw`/\*\*([^*\n]+)\*\*/g`;
+  assert.ok(src.includes(tight), 'the tight bold regex is the one in render.mjs');
+  const mutated = src.replace(tight, loose);
+  assert.notEqual(mutated, src, 'the mutation matched nothing');
+  assert.equal('x ** b** y'.replace(/\*\*(?=\S)([^*\n]*?\S)\*\*/g, '<strong>$1</strong>'), 'x ** b** y');
+  assert.equal('x ** b** y'.replace(/\*\*([^*\n]+)\*\*/g, '<strong>$1</strong>'), 'x <strong> b</strong> y');
 });
 
 test('built digest pages show source backticks as code and contain no raw backticks in text', () => {
