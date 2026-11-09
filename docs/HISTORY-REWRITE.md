@@ -94,7 +94,7 @@ A `TREE DIFFERS` line may appear only for a commit whose files held the old mark
 
 1. Create a new private repository under the owner's account, with the final public name. The old repository is named `agent-diffs`, the dropped name, so the new one is also the moment to use `rulefiles`. The owner creates it.
 2. From the rewritten clone, push branches only: `git push <new-repo-url> --all`. Do not push with `--mirror`, since that would send the pull request refs deleted above.
-3. Recreate the settings on the new repository: the ruleset in `docs/ruleset-main.json`, "Allow GitHub Actions to create and approve pull requests" for the weekly watch, Actions secrets if any, and the merge method.
+3. Recreate the settings on the new repository: the ruleset in `docs/ruleset-main.json`, Actions secrets if any, and the merge method.
 4. Point the working copies at the new URL, or clone again. Delete the old working copies, `git reflog expire --expire=now --all && git gc --prune=now` in any copy kept, only after the bundle of step 2 is verified, since this destroys the unreferenced objects of that copy for good.
 5. Keep the old repository private as an archive, then delete it once the new one is checked. Deleting a repository is destructive and is the owner's call.
 
