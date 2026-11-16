@@ -528,9 +528,10 @@ for (const scheme of ['light', 'dark']) {
   });
 }
 
-// At 768–769 px a column is 57 px and "Desktop)*" is 57.3 px. From 72rem to about 1279 px a column is 56 px.
-// "Desktop)" is about 51 px, so the asterisk after "Windsurf (Devin Desktop)" used to fall alone on a fourth line
-// in both ranges when overflow-wrap was anywhere. A word joiner and overflow-wrap: normal keep it with the last word.
+// At 768 to 769 px a column is 57 px and the mark overflows by 0.00 px. From 72rem to about 1279 px a column is 56 px
+// and the mark overflows by 1.00 px. "Desktop)" is about 51 px, so the asterisk after "Windsurf (Devin Desktop)"
+// used to fall alone on a fourth line in the 56 px range when overflow-wrap was anywhere. A word joiner and
+// overflow-wrap: normal keep it with the last word.
 test('the asterisk of a starred tool name stays on the same line as the last word at 768, 769, 1152, 1200 and 1279 px', async () => {
   for (const w of [768, 769, 1152, 1200, 1279]) {
     const { page, context, errors } = await open(w, 900);
