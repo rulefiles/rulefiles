@@ -6,7 +6,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { build } from '../scripts/build.mjs';
 import { listFiles } from '../scripts/lib/util.mjs';
-import { itemHtml, versionRows, VERSIONS_TABLE_FROM } from '../scripts/lib/render.mjs';
+import { itemHtml, versionRows, VERSIONS_TABLE_FROM, toolNames } from '../scripts/lib/render.mjs';
 import { TEST_DATE } from './helpers/test-date.mjs';
 import { loadData } from '../scripts/lib/data.mjs';
 
@@ -528,10 +528,16 @@ test('every Source link on the digest cards has a unique accessible name that st
   const latestHtml = fs.readFileSync(path.join(out, 'digest', latest, 'index.html'), 'utf8');
   assert.equal((latestHtml.match(/<p class="item-foot">/g) || []).length, latestItems.length, 'one item card per item in the data');
   // From VERSIONS_TABLE_FROM, the "Versions this week" table adds one Source link per row (one per tool with a version).
-  const versionLinks = latest >= VERSIONS_TABLE_FROM ? versionRows(digestOf(latest)).length : 0;
+  // The page walks the matrix tools, not the four original ITEM_TOOLS, so a versioned Gemini CLI item is a row.
+  const versionLinks = latest >= VERSIONS_TABLE_FROM ? versionRows(digestOf(latest), toolNames(loadData(root).matrix)).length : 0;
   const versionsSection = (latestHtml.match(/<section class="versions"[\s\S]*?<\/section>/) || [''])[0];
   assert.equal((versionsSection.match(/<a class="src"/g) || []).length, versionLinks, 'one Source link per row of the versions table');
   assert.equal((latestHtml.match(/<a class="src"/g) || []).length, latestItems.length + versionLinks, 'one Source link per item in the data, plus one per versions row');
+  const missingSource = versionsSection.replace(/<a class="src"[\s\S]*?<\/a>/, '');
+  assert.notEqual(missingSource, versionsSection, 'the missing-link mutation matched a Source link');
+  assert.notEqual((missingSource.match(/<a class="src"/g) || []).length, versionLinks, 'a versions table missing a Source link must fail the count');
+  const extraSource = versionsSection.replace('</tbody>', '<tr><td><a class="src" href="#">Source</a></td></tr></tbody>');
+  assert.notEqual((extraSource.match(/<a class="src"/g) || []).length, versionLinks, 'a versions table with an extra Source link must fail the count');
   const rule = parseRules(css).find((r) => !r.reduce && r.selectors.includes('.item-foot .src'));
   assert.ok(rule, 'a rule sizes .item-foot .src');
   for (const prop of ['min-width', 'min-height']) assert.ok(parseFloat(rule.props[prop]) >= 24 && /px$/.test(rule.props[prop]), `${prop} is at least 24px`);
