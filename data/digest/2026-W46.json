@@ -1,0 +1,188 @@
+{
+  "schemaVersion": 1,
+  "license": "CC-BY-4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+  "attribution": "Rulefiles contributors",
+  "week": "2026-W46",
+  "start": "2026-11-09",
+  "end": "2026-11-15",
+  "status": "published",
+  "verifiedOn": "2026-11-16",
+  "title": "Copilot model deprecations, Fable 5.2, Codex exec trust",
+  "summary": "In short: [Upcoming deprecation of selected GitHub Copilot models in December](https://github.blog/changelog/2026-11-13-upcoming-deprecation-of-selected-github-copilot-models-in-december/): On 2026-12-14 Copilot drops Claude Fable 5, Claude Haiku 4.5, Gemini 3.8 Flash, Gemini 4 Argon, Grok 4.6 and Kimi K3 across all Copilot experiences. The suggested alternatives are Claude Fable 5.2, Claude Haiku 5.5, Gemini 4 Hydrogen, Gemini 4 Carbon and Grok 4.7. No replacement for Kimi K3 has been announced yet. Haiku 4.5 stays for individual subscribers on annual plans; [Claude Code v2.1.321](https://github.com/anthropics/claude-code/releases/tag/v2.1.321): Claude Fable 5.2 (`claude-fable-5-2`) is now the default Fable model, with 1M context at $8/$40 per Mtok and $0.20/Mtok cache reads. GitHub made it generally available in Copilot the same day for Pro+, Max, Business and Enterprise, with data retention required by default; [Codex 0.169.0](https://github.com/openai/codex/releases/tag/rust-v0.169.0): `codex exec` keeps project configuration and MCP servers disabled in untrusted directories, even with `--sandbox workspace-write`. Add `--trust` to `codex exec` or `codex review` to save project trust",
+  "highlights": [
+    "github-copilot-2026-11-13-upcoming-deprecation-of-selected-github-copilot-models-in-december",
+    "claude-code-2026-11-09-2.1.321",
+    "codex-2026-11-13-0.169.0"
+  ],
+  "items": [
+    {
+      "id": "claude-code-2026-11-09-2.1.321",
+      "date": "2026-11-09",
+      "tool": "claude-code",
+      "title": "Claude Code v2.1.321",
+      "text": "Added Claude Fable 5.2 (`claude-fable-5-2`), now the default Fable model — 1M context, $8/$40 per Mtok with $0.20/Mtok cache reads",
+      "quote": true,
+      "version": "2.1.321",
+      "sourceUrl": "https://github.com/anthropics/claude-code/releases/tag/v2.1.321",
+      "sourceLabel": "Claude Code releases"
+    },
+    {
+      "id": "github-copilot-2026-11-09-claude-fable-5-2-in-github-copilot",
+      "date": "2026-11-09",
+      "tool": "github-copilot",
+      "title": "Claude Fable 5.2 in GitHub Copilot",
+      "text": "Claude Fable 5.2, Anthropic’s newest Fable model, is now generally available in GitHub Copilot.",
+      "quote": true,
+      "sourceUrl": "https://github.blog/changelog/2026-11-09-claude-fable-5-2-in-github-copilot/",
+      "sourceLabel": "GitHub changelog"
+    },
+    {
+      "id": "claude-code-2026-11-10-2.1.322",
+      "date": "2026-11-10",
+      "tool": "claude-code",
+      "title": "Claude Code v2.1.322",
+      "text": "Added fast mode on Vertex in the global, us and eu regions, falling back to standard speed if Vertex refuses it",
+      "quote": true,
+      "version": "2.1.322",
+      "sourceUrl": "https://github.com/anthropics/claude-code/releases/tag/v2.1.322",
+      "sourceLabel": "Claude Code releases"
+    },
+    {
+      "id": "codex-2026-11-10-chatgpt-for-ios-1-2026-307",
+      "date": "2026-11-10",
+      "tool": "codex",
+      "title": "ChatGPT for iOS 1.2026.307",
+      "text": "Paste images and files into the full-screen composer, and open file attachments from sent prompts.",
+      "quote": true,
+      "sourceUrl": "https://learn.chatgpt.com/docs/changelog#codex-2026-11-10-mobile",
+      "sourceLabel": "Codex changelog"
+    },
+    {
+      "id": "gemini-cli-2026-11-10-0.68.0",
+      "date": "2026-11-10",
+      "tool": "gemini-cli",
+      "title": "Gemini CLI v0.68.0",
+      "text": "feat(cli): add extension validation command and evaluation tests",
+      "quote": true,
+      "version": "0.68.0",
+      "sourceUrl": "https://github.com/google-gemini/gemini-cli/releases/tag/v0.68.0",
+      "sourceLabel": "Gemini CLI releases"
+    },
+    {
+      "id": "github-copilot-2026-11-10-c-language-server-now-auto-configures-msbuild-builds",
+      "date": "2026-11-10",
+      "tool": "github-copilot",
+      "title": "C++ language server now auto-configures MSBuild builds",
+      "text": "The Microsoft C++ Language Server for GitHub Copilot CLI now bundles its MSBuild compile commands extractor and invokes it automatically.",
+      "quote": true,
+      "sourceUrl": "https://github.blog/changelog/2026-11-10-c-language-server-now-auto-configures-msbuild-builds/",
+      "sourceLabel": "GitHub changelog"
+    },
+    {
+      "id": "github-copilot-2026-11-10-gemini-4-carbon-in-github-copilot",
+      "date": "2026-11-10",
+      "tool": "github-copilot",
+      "title": "Gemini 4 Carbon in GitHub Copilot",
+      "text": "Gemini 4 Carbon, Google’s latest model, is now generally available in GitHub Copilot.",
+      "quote": true,
+      "sourceUrl": "https://github.blog/changelog/2026-11-10-gemini-4-carbon-in-github-copilot/",
+      "sourceLabel": "GitHub changelog"
+    },
+    {
+      "id": "github-copilot-2026-11-10-github-app-support-for-enterprise-copilot-seat-management",
+      "date": "2026-11-10",
+      "tool": "github-copilot",
+      "title": "GitHub App support for Enterprise Copilot seat management",
+      "text": "Enterprise GitHub Apps can now call the enterprise-level Copilot seat management APIs to control which users and enterprise teams are assigned Copilot seats.",
+      "quote": true,
+      "sourceUrl": "https://github.blog/changelog/2026-11-10-github-app-support-for-enterprise-copilot-seat-management/",
+      "sourceLabel": "GitHub changelog"
+    },
+    {
+      "id": "codex-2026-11-11-0.167.2",
+      "date": "2026-11-11",
+      "tool": "codex",
+      "title": "Codex 0.167.2",
+      "text": "Codex now sends tool updates incrementally by default on Google Cloud Vertex AI. To opt out, set `incremental_tools_legacy_gcp = false` under `[features]` in `config.toml`.",
+      "quote": true,
+      "version": "0.167.2",
+      "sourceUrl": "https://github.com/openai/codex/releases/tag/rust-v0.167.2",
+      "sourceLabel": "Codex release notes"
+    },
+    {
+      "id": "claude-code-2026-11-12-2.1.323",
+      "date": "2026-11-12",
+      "tool": "claude-code",
+      "title": "Claude Code v2.1.323",
+      "text": "Added Code Mode, an experimental opt-in in which Claude writes JavaScript to call its tools; see https://code.claude.com/docs/en/code-mode to turn it on, or to turn it off for an organization",
+      "quote": true,
+      "version": "2.1.323",
+      "sourceUrl": "https://github.com/anthropics/claude-code/releases/tag/v2.1.323",
+      "sourceLabel": "Claude Code releases"
+    },
+    {
+      "id": "claude-code-2026-11-13-2.1.325",
+      "date": "2026-11-13",
+      "tool": "claude-code",
+      "title": "Claude Code v2.1.325",
+      "text": "Fixed a security issue in how zstd-compressed responses are decoded",
+      "quote": true,
+      "version": "2.1.325",
+      "sourceUrl": "https://github.com/anthropics/claude-code/releases/tag/v2.1.325",
+      "sourceLabel": "Claude Code releases"
+    },
+    {
+      "id": "codex-2026-11-13-0.168.0",
+      "date": "2026-11-13",
+      "tool": "codex",
+      "title": "Codex 0.168.0",
+      "text": "Browse model providers under Sessions → Model providers and choose the default for new chats.",
+      "quote": true,
+      "version": "0.168.0",
+      "sourceUrl": "https://github.com/openai/codex/releases/tag/rust-v0.168.0",
+      "sourceLabel": "Codex release notes"
+    },
+    {
+      "id": "codex-2026-11-13-0.169.0",
+      "date": "2026-11-13",
+      "tool": "codex",
+      "title": "Codex 0.169.0",
+      "text": "`codex exec` keeps project configuration and MCP servers disabled in untrusted directories, even with `--sandbox workspace-write`. Use `--trust` with `codex exec` or `codex review` to explicitly save project trust.",
+      "quote": true,
+      "version": "0.169.0",
+      "sourceUrl": "https://github.com/openai/codex/releases/tag/rust-v0.169.0",
+      "sourceLabel": "Codex release notes"
+    },
+    {
+      "id": "github-copilot-2026-11-13-gemini-4-hydrogen-in-github-copilot",
+      "date": "2026-11-13",
+      "tool": "github-copilot",
+      "title": "Gemini 4 Hydrogen in GitHub Copilot",
+      "text": "Gemini 4 Hydrogen, Google’s latest Flash model, is now generally available in GitHub Copilot.",
+      "quote": true,
+      "sourceUrl": "https://github.blog/changelog/2026-11-13-gemini-4-hydrogen-in-github-copilot/",
+      "sourceLabel": "GitHub changelog"
+    },
+    {
+      "id": "github-copilot-2026-11-13-github-enterprise-server-support-in-the-github-copilot-app",
+      "date": "2026-11-13",
+      "tool": "github-copilot",
+      "title": "GitHub Enterprise Server support in the GitHub Copilot app",
+      "text": "You can now bring your work on GitHub Enterprise Server (GHES) into the GitHub Copilot app.",
+      "quote": true,
+      "sourceUrl": "https://github.blog/changelog/2026-11-13-github-enterprise-server-support-in-the-github-copilot-app/",
+      "sourceLabel": "GitHub changelog"
+    },
+    {
+      "id": "github-copilot-2026-11-13-upcoming-deprecation-of-selected-github-copilot-models-in-december",
+      "date": "2026-11-13",
+      "tool": "github-copilot",
+      "title": "Upcoming deprecation of selected GitHub Copilot models in December",
+      "text": "We will deprecate the following models across all GitHub Copilot experiences (including Copilot Chat, inline edits, ask and agent modes, and code completions) on December 14, 2026",
+      "quote": true,
+      "sourceUrl": "https://github.blog/changelog/2026-11-13-upcoming-deprecation-of-selected-github-copilot-models-in-december/",
+      "sourceLabel": "GitHub changelog"
+    }
+  ]
+}
