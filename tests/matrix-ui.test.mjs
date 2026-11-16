@@ -65,6 +65,44 @@ test('matrix page: the copy of the compact grid, pasted as reviewed, with N take
   assert.match(html, /<ul class="status-counts" aria-label="Cells by status">/);
 });
 
+test('a starred tool name has a word joiner before its asterisk, so the mark cannot start a line alone', () => {
+  const starred = matrix.tools.filter((t) => t.scope);
+  assert.equal(starred.length, 2, 'both scoped tools are marked');
+  const head = /<div class="mrow mhead"[\s\S]*?<\/div><\/div>/.exec(html)[0];
+  const esc = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const mark = '&#8288;<span aria-hidden="true">*</span>';
+  const cellRe = (t) => new RegExp(`<span class="mtool" role="columnheader" data-tool="${t.id}"><a href="[^"]+" rel="noopener">${esc(t.name)}</a>(${esc(mark)})?</span>`);
+  for (const t of starred) {
+    const cell = cellRe(t).exec(head);
+    assert.ok(cell, `${t.name}: header cell missing`);
+    assert.equal(cell[1], mark, `${t.name}: word joiner sits between the link and the asterisk`);
+  }
+  for (const t of matrix.tools.filter((t) => !t.scope)) {
+    const cell = cellRe(t).exec(head);
+    assert.ok(cell, `${t.name}: header cell missing`);
+    assert.equal(cell[1], undefined, `${t.name}: no word joiner or asterisk`);
+  }
+  const plain = head.replaceAll('&#8288;', '');
+  assert.notEqual(plain, head, 'the mutation matched a word joiner');
+  for (const t of starred) {
+    const cell = cellRe(t).exec(plain);
+    assert.ok(!cell || cell[1] !== mark, `${t.name}: dropping the word joiner must fail the check`);
+  }
+});
+
+test('.mtool uses overflow-wrap: normal for horizontal names, including 48rem to 59.99rem', () => {
+  const css = fs.readFileSync(new URL('../src/static/style.css', import.meta.url), 'utf8');
+  const blocks = [...css.matchAll(/\.mtool\s*\{([^}]*)\}/g)].map((m) => m[1]);
+  const wrap = (src) => [...src.matchAll(/\.mtool\s*\{([^}]*)\}/g)].some((m) => /overflow-wrap:\s*anywhere/.test(m[1]));
+  assert.ok(blocks.some((b) => /overflow-wrap:\s*normal/.test(b)), '.mtool sets overflow-wrap: normal');
+  assert.equal(wrap(css), false, 'no .mtool rule may set overflow-wrap: anywhere');
+  const byDefault = css.replace(/(\.mtool \{[^}]*overflow-wrap:\s*)normal/, '$1anywhere');
+  assert.notEqual(byDefault, css, 'the default .mtool rule was found');
+  assert.equal(wrap(byDefault), true, 'changing the default to anywhere must fail the check');
+  const atTablet = css + '\n@media (min-width: 48rem) and (max-width: 59.99rem) { .mtool { overflow-wrap: anywhere; } }\n';
+  assert.equal(wrap(atTablet), true, 'an anywhere rule at 48rem to 59.99rem must fail the check');
+});
+
 test('the "All N notes" fold counts the cells of the data, whatever their number', () => {
   const data = loadData();
   const keep = new Set(data.matrix.tools.slice(0, 3).map((t) => t.id));

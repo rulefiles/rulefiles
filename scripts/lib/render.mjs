@@ -365,7 +365,10 @@ export function matrixPage(ctx) {
   const stale = new Set(staleCells(matrix, today, config.staleAfterDays).map((c) => `${c.tool}/${c.file}`));
   const cellMap = new Map(matrix.cells.map((c) => [`${c.tool}/${c.file}`, c]));
   const scoped = matrix.tools.filter((t) => t.scope);
-  const mark = (t) => (t.scope ? '<span aria-hidden="true">*</span>' : '');
+  // A word joiner sits between the name and the asterisk. Combined with overflow-wrap: normal from 72rem,
+  // the mark stays on the last word's line; from 1152 to about 1279 px, "Desktop)*" is just over 56 px
+  // and anywhere used to leave the mark alone on a fourth line.
+  const mark = (t) => (t.scope ? '&#8288;<span aria-hidden="true">*</span>' : '');
   // The grid is a table for assistive tech; matrix.js turns it into an ARIA grid with arrow keys. Each row holds
   // its tiles in .tiles, whose columns come from the markup (grid-auto-flow: column), so the number of tools
   // is never written in the stylesheet.
