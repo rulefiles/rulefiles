@@ -90,6 +90,19 @@ test('a starred tool name has a word joiner before its asterisk, so the mark can
   }
 });
 
+test('.mtool uses overflow-wrap: normal for horizontal names, including 48rem to 59.99rem', () => {
+  const css = fs.readFileSync(new URL('../src/static/style.css', import.meta.url), 'utf8');
+  const blocks = [...css.matchAll(/\.mtool\s*\{([^}]*)\}/g)].map((m) => m[1]);
+  const wrap = (src) => [...src.matchAll(/\.mtool\s*\{([^}]*)\}/g)].some((m) => /overflow-wrap:\s*anywhere/.test(m[1]));
+  assert.ok(blocks.some((b) => /overflow-wrap:\s*normal/.test(b)), '.mtool sets overflow-wrap: normal');
+  assert.equal(wrap(css), false, 'no .mtool rule may set overflow-wrap: anywhere');
+  const byDefault = css.replace(/(\.mtool \{[^}]*overflow-wrap:\s*)normal/, '$1anywhere');
+  assert.notEqual(byDefault, css, 'the default .mtool rule was found');
+  assert.equal(wrap(byDefault), true, 'changing the default to anywhere must fail the check');
+  const atTablet = css + '\n@media (min-width: 48rem) and (max-width: 59.99rem) { .mtool { overflow-wrap: anywhere; } }\n';
+  assert.equal(wrap(atTablet), true, 'an anywhere rule at 48rem to 59.99rem must fail the check');
+});
+
 test('the "All N notes" fold counts the cells of the data, whatever their number', () => {
   const data = loadData();
   const keep = new Set(data.matrix.tools.slice(0, 3).map((t) => t.id));

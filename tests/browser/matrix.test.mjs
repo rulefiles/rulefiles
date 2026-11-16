@@ -528,10 +528,11 @@ for (const scheme of ['light', 'dark']) {
   });
 }
 
-// From 72rem to about 1279 px a tile column is 56 px. "Desktop)" is about 51 px, so the asterisk after
-// "Windsurf (Devin Desktop)" used to fall alone on a fourth line. A word joiner keeps it with the last word.
-test('the asterisk of a starred tool name stays on the same line as the last word at 1152, 1200 and 1279 px', async () => {
-  for (const w of [1152, 1200, 1279]) {
+// At 768–769 px a column is 57 px and "Desktop)*" is 57.3 px. From 72rem to about 1279 px a column is 56 px.
+// "Desktop)" is about 51 px, so the asterisk after "Windsurf (Devin Desktop)" used to fall alone on a fourth line
+// in both ranges when overflow-wrap was anywhere. A word joiner and overflow-wrap: normal keep it with the last word.
+test('the asterisk of a starred tool name stays on the same line as the last word at 768, 769, 1152, 1200 and 1279 px', async () => {
+  for (const w of [768, 769, 1152, 1200, 1279]) {
     const { page, context, errors } = await open(w, 900);
     await page.evaluate(() => document.fonts && document.fonts.ready);
     const r = await page.evaluate(() => [...document.querySelectorAll('#matrix-grid .mtool')].flatMap((el) => {
@@ -550,24 +551,27 @@ test('the asterisk of a starred tool name stays on the same line as the last wor
     }));
     assert.equal(r.length, 2, `${w}px: two starred tools`);
     for (const t of r) assert.ok(t.sameLine, `${w}px: asterisk after "${t.name}" is not on the same line as "${t.last}"`);
-    // Mutation: overflow-wrap: anywhere (the 72rem rule taken off) breaks "Desktop)*" in a 56 px column,
-    // even with the word joiner in the markup.
-    const mutated = await page.evaluate(() => {
-      const el = document.querySelector('#matrix-grid .mtool[data-tool="windsurf"]');
-      el.style.overflowWrap = 'anywhere';
-      const star = [...el.querySelectorAll('span')].find((s) => s.textContent === '*');
-      const text = el.querySelector('a').firstChild;
-      const name = text.textContent;
-      const lastIdx = name.search(/\S+$/);
-      const last = name.slice(lastIdx);
-      const range = document.createRange();
-      range.setStart(text, lastIdx);
-      range.setEnd(text, name.length);
-      const word = [...range.getClientRects()].filter((q) => q.width > 0 && q.height > 0).at(-1);
-      const mark = star.getBoundingClientRect();
-      return { last, sameLine: Math.abs(word.top - mark.top) < 1 };
-    });
-    assert.equal(mutated.sameLine, false, `${w}px: with overflow-wrap: anywhere the asterisk must leave the line of "${mutated.last}"`);
+    // Mutation: overflow-wrap: anywhere in a 56 px column (1152 to 1279) breaks "Desktop)*", even with the
+    // word joiner. At 768–769 a column is 57 px, which can fit the 57 px sequence, so that case is
+    // guarded in tests/matrix-ui.test.mjs (a 48–59.99rem anywhere rule must fail).
+    if (w >= 1152) {
+      const mutated = await page.evaluate(() => {
+        const el = document.querySelector('#matrix-grid .mtool[data-tool="windsurf"]');
+        el.style.overflowWrap = 'anywhere';
+        const star = [...el.querySelectorAll('span')].find((s) => s.textContent === '*');
+        const text = el.querySelector('a').firstChild;
+        const name = text.textContent;
+        const lastIdx = name.search(/\S+$/);
+        const last = name.slice(lastIdx);
+        const range = document.createRange();
+        range.setStart(text, lastIdx);
+        range.setEnd(text, name.length);
+        const word = [...range.getClientRects()].filter((q) => q.width > 0 && q.height > 0).at(-1);
+        const mark = star.getBoundingClientRect();
+        return { last, sameLine: Math.abs(word.top - mark.top) < 1 };
+      });
+      assert.equal(mutated.sameLine, false, `${w}px: with overflow-wrap: anywhere the asterisk must leave the line of "${mutated.last}"`);
+    }
     assert.deepEqual(errors, []);
     await context.close();
   }
