@@ -528,6 +528,51 @@ for (const scheme of ['light', 'dark']) {
   });
 }
 
+// From 72rem to about 1279 px a tile column is 56 px. "Desktop)" is about 51 px, so the asterisk after
+// "Windsurf (Devin Desktop)" used to fall alone on a fourth line. A word joiner keeps it with the last word.
+test('the asterisk of a starred tool name stays on the same line as the last word at 1152, 1200 and 1279 px', async () => {
+  for (const w of [1152, 1200, 1279]) {
+    const { page, context, errors } = await open(w, 900);
+    await page.evaluate(() => document.fonts && document.fonts.ready);
+    const r = await page.evaluate(() => [...document.querySelectorAll('#matrix-grid .mtool')].flatMap((el) => {
+      const star = [...el.querySelectorAll('span')].find((s) => s.textContent === '*');
+      if (!star) return [];
+      const text = el.querySelector('a').firstChild;
+      const name = text.textContent;
+      const lastIdx = name.search(/\S+$/);
+      const last = name.slice(lastIdx);
+      const range = document.createRange();
+      range.setStart(text, lastIdx);
+      range.setEnd(text, name.length);
+      const word = [...range.getClientRects()].filter((q) => q.width > 0 && q.height > 0).at(-1);
+      const mark = star.getBoundingClientRect();
+      return [{ name, last, sameLine: Math.abs(word.top - mark.top) < 1 }];
+    }));
+    assert.equal(r.length, 2, `${w}px: two starred tools`);
+    for (const t of r) assert.ok(t.sameLine, `${w}px: asterisk after "${t.name}" is not on the same line as "${t.last}"`);
+    // Mutation: overflow-wrap: anywhere (the 72rem rule taken off) breaks "Desktop)*" in a 56 px column,
+    // even with the word joiner in the markup.
+    const mutated = await page.evaluate(() => {
+      const el = document.querySelector('#matrix-grid .mtool[data-tool="windsurf"]');
+      el.style.overflowWrap = 'anywhere';
+      const star = [...el.querySelectorAll('span')].find((s) => s.textContent === '*');
+      const text = el.querySelector('a').firstChild;
+      const name = text.textContent;
+      const lastIdx = name.search(/\S+$/);
+      const last = name.slice(lastIdx);
+      const range = document.createRange();
+      range.setStart(text, lastIdx);
+      range.setEnd(text, name.length);
+      const word = [...range.getClientRects()].filter((q) => q.width > 0 && q.height > 0).at(-1);
+      const mark = star.getBoundingClientRect();
+      return { last, sameLine: Math.abs(word.top - mark.top) < 1 };
+    });
+    assert.equal(mutated.sameLine, false, `${w}px: with overflow-wrap: anywhere the asterisk must leave the line of "${mutated.last}"`);
+    assert.deepEqual(errors, []);
+    await context.close();
+  }
+});
+
 // keepBarInView also runs on search input. While the search box is in view it does nothing: typing never scrolls.
 test('typing in the search box with the bar in view does not scroll the page at 320, 390 and 1440', async () => {
   for (const [w, h] of [[320, 700], [390, 844], [1440, 900]]) {
