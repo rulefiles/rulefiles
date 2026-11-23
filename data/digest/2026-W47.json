@@ -1,0 +1,339 @@
+{
+  "schemaVersion": 1,
+  "license": "CC-BY-4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+  "attribution": "Rulefiles contributors",
+  "week": "2026-W47",
+  "start": "2026-11-16",
+  "end": "2026-11-22",
+  "status": "published",
+  "verifiedOn": "2026-11-23",
+  "title": "Copilot plugin-only customizations, GPT-6.2, /code-review",
+  "summary": "In short: [Control where GitHub Copilot customizations come from](https://github.blog/changelog/2026-11-16-control-where-github-copilot-customizations-come-from/): Enterprise administrators can now require skills, custom agents, hooks, MCP servers and executable Copilot extensions to come from plugins or managed settings, for all five categories or only some. The `strictPluginOnlyCustomization` managed setting then blocks standalone customizations from user and project sources. It works on GitHub Enterprise Cloud for Copilot Business and Enterprise licenses. On 2026-11-18, team customizations became generally available: team maintainers and organization owners can pick approved plugins as team defaults. [GPT-6.2 Astra and GPT-6.2 Sol in Work and Codex](https://learn.chatgpt.com/docs/changelog#codex-gpt-62-astra): GPT-6.2 Astra and GPT-6.2 Sol are available in ChatGPT Work and Codex. OpenAI suggests Astra for the hardest projects and Sol for everyday coding. GitHub made both generally available in Copilot the same day for Pro+, Max, Business and Enterprise. Codex 0.171.0 (2026-11-20) adds them to its model catalogs, with Sol as the default selection. [Claude Code v2.1.328](https://github.com/anthropics/claude-code/releases/tag/v2.1.328): `/code-review` now reports only bugs and CLAUDE.md violations on most models; `/simplify` takes the reuse, simplification and efficiency cleanups. v2.1.329 (2026-11-19) fixes `/code-review` stopping at a permission prompt, on most models, to look for a `~/.claude/CLAUDE.md` that doesn't exist.",
+  "highlights": [
+    "github-copilot-2026-11-16-control-where-github-copilot-customizations-come-from",
+    "codex-2026-11-17-gpt-6-2-astra-and-gpt-6-2-sol-in-work-and-codex",
+    "claude-code-2026-11-19-2.1.328"
+  ],
+  "items": [
+    {
+      "id": "claude-code-2026-11-16-2.1.326",
+      "date": "2026-11-16",
+      "tool": "claude-code",
+      "title": "Claude Code v2.1.326",
+      "text": "Added support for turning on Code Mode while agent teams are enabled; if you already turned it on, sessions with teams on now start in Code Mode",
+      "quote": true,
+      "version": "2.1.326",
+      "sourceUrl": "https://github.com/anthropics/claude-code/releases/tag/v2.1.326",
+      "sourceLabel": "Claude Code releases"
+    },
+    {
+      "id": "github-copilot-2026-11-16-control-where-github-copilot-customizations-come-from",
+      "date": "2026-11-16",
+      "tool": "github-copilot",
+      "title": "Control where GitHub Copilot customizations come from",
+      "text": "As an enterprise administrator, you can now require selected GitHub Copilot customizations to come from plugins or managed settings, rather than standalone user or project configuration.",
+      "quote": true,
+      "sourceUrl": "https://github.blog/changelog/2026-11-16-control-where-github-copilot-customizations-come-from/",
+      "sourceLabel": "GitHub changelog"
+    },
+    {
+      "id": "github-copilot-2026-11-16-github-copilot-models-deprecated-on-november-16-2026",
+      "date": "2026-11-16",
+      "tool": "github-copilot",
+      "title": "GitHub Copilot models deprecated on November 16, 2026",
+      "text": "As of today, November 16, 2026, we have deprecated the following models across most GitHub Copilot experiences (including Copilot Chat, inline edits, ask and agent modes, and code completions).",
+      "quote": true,
+      "sourceUrl": "https://github.blog/changelog/2026-11-16-github-copilot-models-deprecated-on-november-16-2026/",
+      "sourceLabel": "GitHub changelog"
+    },
+    {
+      "id": "github-copilot-2026-11-16-vs-code-retires-the-local-harness-in-february-2027",
+      "date": "2026-11-16",
+      "tool": "github-copilot",
+      "title": "VS Code retires the Local harness in February 2027",
+      "text": "Visual Studio Code 1.146 deprecates the Local harness, the older software that coordinates the model, context, and tools for GitHub Copilot agent sessions in the editor. The Local harness will be removed in February 2027.",
+      "quote": true,
+      "sourceUrl": "https://github.blog/changelog/2026-11-16-vs-code-retires-the-local-harness-in-february-2027/",
+      "sourceLabel": "GitHub changelog"
+    },
+    {
+      "id": "claude-code-2026-11-17-2.1.327",
+      "date": "2026-11-17",
+      "tool": "claude-code",
+      "title": "Claude Code v2.1.327",
+      "text": "Added a confirmation before `/install-github-app` changes a repository",
+      "quote": true,
+      "version": "2.1.327",
+      "sourceUrl": "https://github.com/anthropics/claude-code/releases/tag/v2.1.327",
+      "sourceLabel": "Claude Code releases"
+    },
+    {
+      "id": "codex-2026-11-17-gpt-6-2-astra-and-gpt-6-2-sol-in-work-and-codex",
+      "date": "2026-11-17",
+      "tool": "codex",
+      "title": "GPT-6.2 Astra and GPT-6.2 Sol in Work and Codex",
+      "text": "GPT-6.2 Astra and GPT-6.2 Sol are now available in ChatGPT Work and Codex.",
+      "quote": true,
+      "sourceUrl": "https://learn.chatgpt.com/docs/changelog#codex-gpt-62-astra",
+      "sourceLabel": "Codex changelog"
+    },
+    {
+      "id": "github-copilot-2026-11-17-copilot-code-review-adaptive-effort-secret-detection-and-more",
+      "date": "2026-11-17",
+      "tool": "github-copilot",
+      "title": "Copilot code review: Adaptive effort, secret detection, and more",
+      "text": "Adaptive matches review depth to each pull request, so routine changes get a quick pass and risky changes get a deeper look.",
+      "quote": true,
+      "sourceUrl": "https://github.blog/changelog/2026-11-17-copilot-code-review-adaptive-effort-secret-detection-and-more/",
+      "sourceLabel": "GitHub changelog"
+    },
+    {
+      "id": "github-copilot-2026-11-17-github-copilot-app-microsoft-ignite-releases",
+      "date": "2026-11-17",
+      "tool": "github-copilot",
+      "title": "GitHub Copilot app, Microsoft Ignite releases",
+      "text": "The GitHub Copilot app now supports your Azure DevOps repositories, your GitHub Enterprise Server instance, and the browser you’re already signed in to.",
+      "quote": true,
+      "sourceUrl": "https://github.blog/changelog/2026-11-17-github-copilot-app-microsoft-ignite-releases/",
+      "sourceLabel": "GitHub changelog"
+    },
+    {
+      "id": "github-copilot-2026-11-17-github-copilot-benchmarks-site-adds-harness-comparisons",
+      "date": "2026-11-17",
+      "tool": "github-copilot",
+      "title": "GitHub Copilot benchmarks site adds harness comparisons",
+      "text": "The new Harnesses view compares GitHub Copilot CLI with Claude Code and Codex CLI using the same model at the same reasoning effort.",
+      "quote": true,
+      "sourceUrl": "https://github.blog/changelog/2026-11-17-github-copilot-benchmarks-site-adds-harness-comparisons/",
+      "sourceLabel": "GitHub changelog"
+    },
+    {
+      "id": "github-copilot-2026-11-17-github-copilot-cli-adds-microsoft-entra-sign-in-as-a-preview",
+      "date": "2026-11-17",
+      "tool": "github-copilot",
+      "title": "GitHub Copilot CLI adds Microsoft Entra sign-in as a preview",
+      "text": "GitHub Copilot CLI now supports Microsoft Entra authentication in public preview.",
+      "quote": true,
+      "sourceUrl": "https://github.blog/changelog/2026-11-17-github-copilot-cli-adds-microsoft-entra-sign-in-as-a-preview/",
+      "sourceLabel": "GitHub changelog"
+    },
+    {
+      "id": "github-copilot-2026-11-17-github-copilot-evals-is-now-in-public-preview",
+      "date": "2026-11-17",
+      "tool": "github-copilot",
+      "title": "GitHub Copilot Evals is now in public preview",
+      "text": "You can now use GitHub Copilot Evals to optimize GitHub Copilot for yourself.",
+      "quote": true,
+      "sourceUrl": "https://github.blog/changelog/2026-11-17-github-copilot-evals-is-now-in-public-preview/",
+      "sourceLabel": "GitHub changelog"
+    },
+    {
+      "id": "github-copilot-2026-11-17-github-copilot-fusion-updates-more-availability-benchmarks-and-models",
+      "date": "2026-11-17",
+      "tool": "github-copilot",
+      "title": "GitHub Copilot Fusion updates: more availability, benchmarks, and models",
+      "text": "Today, we’re expanding GitHub Copilot Fusion with new models, available on more Copilot surfaces, and results on two public Terminal-Bench leaderboards, giving you more ways to use Fusion and compare its performance.",
+      "quote": true,
+      "sourceUrl": "https://github.blog/changelog/2026-11-17-github-copilot-fusion-updates-more-availability-benchmarks-and-models/",
+      "sourceLabel": "GitHub changelog"
+    },
+    {
+      "id": "github-copilot-2026-11-17-github-copilot-in-jetbrains-ignite-releases",
+      "date": "2026-11-17",
+      "tool": "github-copilot",
+      "title": "GitHub Copilot in JetBrains, Ignite releases",
+      "text": "This update brings remote access, on-device voice dictation, and browser use controls to GitHub Copilot for JetBrains.",
+      "quote": true,
+      "sourceUrl": "https://github.blog/changelog/2026-11-17-github-copilot-in-jetbrains-ignite-releases/",
+      "sourceLabel": "GitHub changelog"
+    },
+    {
+      "id": "github-copilot-2026-11-17-let-github-copilot-interact-with-your-browser",
+      "date": "2026-11-17",
+      "tool": "github-copilot",
+      "title": "Let GitHub Copilot interact with your browser",
+      "text": "Paired with the GitHub Copilot Chrome extension, browser use is now available in public preview in GitHub Copilot CLI, GitHub Copilot app, VS Code and JetBrains.",
+      "quote": true,
+      "sourceUrl": "https://github.blog/changelog/2026-11-17-let-github-copilot-interact-with-your-browser/",
+      "sourceLabel": "GitHub changelog"
+    },
+    {
+      "id": "github-copilot-2026-11-17-mai-code-2-and-mai-code-2-flash-in-github-copilot",
+      "date": "2026-11-17",
+      "tool": "github-copilot",
+      "title": "MAI Code 2 and MAI Code 2 Flash in GitHub Copilot",
+      "text": "The next generation of Microsoft AI (MAI) coding models has arrived in GitHub Copilot.",
+      "quote": true,
+      "sourceUrl": "https://github.blog/changelog/2026-11-17-mai-code-2-and-mai-code-2-flash-in-github-copilot/",
+      "sourceLabel": "GitHub changelog"
+    },
+    {
+      "id": "github-copilot-2026-11-17-monitor-github-copilot-activity-through-microsoft-agent-365",
+      "date": "2026-11-17",
+      "tool": "github-copilot",
+      "title": "Monitor GitHub Copilot activity through Microsoft Agent 365",
+      "text": "Enterprises can now stream GitHub Copilot agent activity directly into Microsoft Agent 365.",
+      "quote": true,
+      "sourceUrl": "https://github.blog/changelog/2026-11-17-monitor-github-copilot-activity-through-microsoft-agent-365/",
+      "sourceLabel": "GitHub changelog"
+    },
+    {
+      "id": "github-copilot-2026-11-17-openais-gpt-6-2-astra-and-gpt-6-2-sol-now-available",
+      "date": "2026-11-17",
+      "tool": "github-copilot",
+      "title": "OpenAI’s GPT-6.2 Astra and GPT-6.2 Sol now available",
+      "text": "OpenAI’s GPT-6.2 Astra and GPT-6.2 Sol are now generally available in GitHub Copilot.",
+      "quote": true,
+      "sourceUrl": "https://github.blog/changelog/2026-11-17-openais-gpt-6-2-astra-and-gpt-6-2-sol-now-available/",
+      "sourceLabel": "GitHub changelog"
+    },
+    {
+      "id": "github-copilot-2026-11-17-secret-scanning-on-demand-for-developers-and-agents",
+      "date": "2026-11-17",
+      "tool": "github-copilot",
+      "title": "Secret scanning on demand for developers and agents",
+      "text": "Copilot’s security review specialist now runs GitHub secret scanning, so developers and agents can catch secrets in code changes before they’re merged.",
+      "quote": true,
+      "sourceUrl": "https://github.blog/changelog/2026-11-17-secret-scanning-on-demand-for-developers-and-agents/",
+      "sourceLabel": "GitHub changelog"
+    },
+    {
+      "id": "github-copilot-2026-11-17-track-copilot-code-review-outcomes-in-repository-insights",
+      "date": "2026-11-17",
+      "tool": "github-copilot",
+      "title": "Track Copilot code review outcomes in Repository insights",
+      "text": "You can now see how Copilot code review feedback lands in each repository.",
+      "quote": true,
+      "sourceUrl": "https://github.blog/changelog/2026-11-17-track-copilot-code-review-outcomes-in-repository-insights/",
+      "sourceLabel": "GitHub changelog"
+    },
+    {
+      "id": "github-copilot-2026-11-17-upcoming-deprecation-of-mai-code-1-1-flash-in-december",
+      "date": "2026-11-17",
+      "tool": "github-copilot",
+      "title": "Upcoming deprecation of MAI-Code-1.1-Flash in December",
+      "text": "With the launch of MAI Code 2 Flash, we will deprecate MAI-Code-1.1-Flash across all GitHub Copilot experiences on December 18, 2026",
+      "quote": true,
+      "sourceUrl": "https://github.blog/changelog/2026-11-17-upcoming-deprecation-of-mai-code-1-1-flash-in-december/",
+      "sourceLabel": "GitHub changelog"
+    },
+    {
+      "id": "codex-2026-11-18-chatgpt-for-ios-1-2026-314",
+      "date": "2026-11-18",
+      "tool": "codex",
+      "title": "ChatGPT for iOS 1.2026.314",
+      "text": "Side chats are now saved on compatible paired computers, so you can reopen them later from the original task.",
+      "quote": true,
+      "sourceUrl": "https://learn.chatgpt.com/docs/changelog#codex-2026-11-18-mobile",
+      "sourceLabel": "Codex changelog"
+    },
+    {
+      "id": "codex-2026-11-18-0.170.0",
+      "date": "2026-11-18",
+      "tool": "codex",
+      "title": "Codex 0.170.0",
+      "text": "Added experimental support for using identically named MCP servers across environments.",
+      "quote": true,
+      "version": "0.170.0",
+      "sourceUrl": "https://github.com/openai/codex/releases/tag/rust-v0.170.0",
+      "sourceLabel": "Codex release notes"
+    },
+    {
+      "id": "github-copilot-2026-11-18-connect-supabase-box-calendly-and-more-to-copilot",
+      "date": "2026-11-18",
+      "tool": "github-copilot",
+      "title": "Connect Supabase, Box, Calendly, and more to Copilot",
+      "text": "You can now connect eight more services to Copilot using GitHub-verified MCP servers, or connectors, available in public preview.",
+      "quote": true,
+      "sourceUrl": "https://github.blog/changelog/2026-11-18-connect-supabase-box-calendly-and-more-to-copilot/",
+      "sourceLabel": "GitHub changelog"
+    },
+    {
+      "id": "github-copilot-2026-11-18-customize-github-copilot-for-your-team",
+      "date": "2026-11-18",
+      "tool": "github-copilot",
+      "title": "Customize GitHub Copilot for your team",
+      "text": "You can now share the GitHub Copilot plugins your team relies on without asking every member to repeat the same setup. Team customizations are generally available for organization teams.",
+      "quote": true,
+      "sourceUrl": "https://github.blog/changelog/2026-11-18-customize-github-copilot-for-your-team/",
+      "sourceLabel": "GitHub changelog"
+    },
+    {
+      "id": "github-copilot-2026-11-18-gemini-4-neon-in-github-copilot",
+      "date": "2026-11-18",
+      "tool": "github-copilot",
+      "title": "Gemini 4 Neon in GitHub Copilot",
+      "text": "Gemini 4 Neon is now generally available in GitHub Copilot.",
+      "quote": true,
+      "sourceUrl": "https://github.blog/changelog/2026-11-18-gemini-4-neon-in-github-copilot/",
+      "sourceLabel": "GitHub changelog"
+    },
+    {
+      "id": "claude-code-2026-11-19-2.1.328",
+      "date": "2026-11-19",
+      "tool": "claude-code",
+      "title": "Claude Code v2.1.328",
+      "text": "Changed `/code-review` on most models to report only bugs and CLAUDE.md violations; run `/simplify` for reuse, simplification and efficiency cleanups",
+      "quote": true,
+      "version": "2.1.328",
+      "sourceUrl": "https://github.com/anthropics/claude-code/releases/tag/v2.1.328",
+      "sourceLabel": "Claude Code releases"
+    },
+    {
+      "id": "claude-code-2026-11-19-2.1.329",
+      "date": "2026-11-19",
+      "tool": "claude-code",
+      "title": "Claude Code v2.1.329",
+      "text": "Added a trust dialog warning that says where a folder's hooks are declared",
+      "quote": true,
+      "version": "2.1.329",
+      "sourceUrl": "https://github.com/anthropics/claude-code/releases/tag/v2.1.329",
+      "sourceLabel": "Claude Code releases"
+    },
+    {
+      "id": "gemini-cli-2026-11-19-0.69.0",
+      "date": "2026-11-19",
+      "tool": "gemini-cli",
+      "title": "Gemini CLI v0.69.0",
+      "text": "feat(cli): add /stats heatmap subcommand for daily token usage",
+      "quote": true,
+      "version": "0.69.0",
+      "sourceUrl": "https://github.com/google-gemini/gemini-cli/releases/tag/v0.69.0",
+      "sourceLabel": "Gemini CLI releases"
+    },
+    {
+      "id": "gemini-cli-2026-11-19-0.70.0",
+      "date": "2026-11-19",
+      "tool": "gemini-cli",
+      "title": "Gemini CLI v0.70.0",
+      "text": "fix(cli): skip system MCP servers with insecure command permissions",
+      "quote": true,
+      "version": "0.70.0",
+      "sourceUrl": "https://github.com/google-gemini/gemini-cli/releases/tag/v0.70.0",
+      "sourceLabel": "Gemini CLI releases"
+    },
+    {
+      "id": "claude-code-2026-11-20-2.1.330",
+      "date": "2026-11-20",
+      "tool": "claude-code",
+      "title": "Claude Code v2.1.330",
+      "text": "Added sign-in to organizations managed in Anthropic's Enterprise Admin Console: after `claude auth login`, Claude Code applies the organization's settings and uses its cloud provider or gateway",
+      "quote": true,
+      "version": "2.1.330",
+      "sourceUrl": "https://github.com/anthropics/claude-code/releases/tag/v2.1.330",
+      "sourceLabel": "Claude Code releases"
+    },
+    {
+      "id": "codex-2026-11-20-0.171.0",
+      "date": "2026-11-20",
+      "tool": "codex",
+      "title": "Codex 0.171.0",
+      "text": "Added GPT-6.2 Sol and Astra to model catalogs, with Sol as the default catalog selection.",
+      "quote": true,
+      "version": "0.171.0",
+      "sourceUrl": "https://github.com/openai/codex/releases/tag/rust-v0.171.0",
+      "sourceLabel": "Codex release notes"
+    }
+  ]
+}
